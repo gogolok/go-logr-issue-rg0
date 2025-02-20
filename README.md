@@ -9,3 +9,21 @@ Run the main file via `go run main.go` and you should see the following log line
 {"level":"info","ts":1739977744.9809742,"caller":"go-logr-issue-rg0/main.go:16","msg":"event received","event":"GetOrganization","project-id":"project-id-1","organization-id":"org-id-3"}
 DONE
 ```
+
+# Solution
+
+```diff
+diff --git a/main.go b/main.go
+index e06369e..4646f98 100644
+--- a/main.go
++++ b/main.go
+@@ -20,7 +20,7 @@ func main() {
+
+ func withProjectOrgLogger(logger logr.Logger, event string, projectId string, organizationId string, keysAndValues ...any) logr.Logger {
+        const logKeyOrganization = "organization-id"
+-       return withProjectLogger(logger, event, projectId, logKeyOrganization, organizationId, keysAndValues)
++       return withProjectLogger(logger, event, projectId, logKeyOrganization, organizationId).WithValues(keysAndValues...)
+ }
+
+ func withProjectLogger(logger logr.Logger, event string, projectId string, keysAndValues ...any) logr.Logger {
+```
